@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sözün Gücü | Sözlü İletişim Engelleri & Konuşma Sınavı </title>
+  <meta name="description"
+    content="Türk Dili ve Edebiyatı konuşma sınavı için hazırlanmış interaktif sözlü iletişim engelleri portalı, teleprompter modu ve simülatörler.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-theme="dark">
+
+  <!-- Arka Plan Dinamik Parçacık Tuvali -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="brand-logo" id="logo-link">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <circle cx="9" cy="10" r="1" fill="currentColor"></circle>
+            <circle cx="12" cy="10" r="1" fill="currentColor"></circle>
+            <circle cx="15" cy="10" r="1" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">İLETİŞİMİN ENGELLERİ</span>
+          <span class="logo-sub">Sözün Gücü</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu" id="nav-menu">
+        <a href="#hero" class="nav-link active" id="nav-hero">Giriş</a>
+        <a href="#engeller" class="nav-link" id="nav-engeller">Engeller Atlası</a>
+        <a href="#deney" class="nav-link" id="nav-deney">🔄 Kulaktan Kulağa</a>
+        <a href="#sinif-quiz" class="nav-link highlight-link" id="nav-quiz">🎯 Sınıf Testi (1-28)</a>
+        <a href="#alintilar" class="nav-link" id="nav-alintilar">Edebi Alıntılar</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="action-btn icon-only" id="theme-toggle-btn" title="Tema Değiştir" aria-label="Tema Değiştir">
+          <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <button class="action-btn icon-only" id="fullscreen-toggle-btn" title="Tam Ekran (Akıllı Tahta Modu)"
+          aria-label="Tam Ekran">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+            </path>
+          </svg>
+        </button>
+
+        <a href="#sinif-quiz" class="btn btn-primary" id="start-speech-btn">
+          <span>🎯 Sınıf Testini Başlat</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </a>
+
+        <button class="mobile-toggle" id="mobile-menu-btn" aria-label="Menüyü Aç">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-container">
+        <div class="badge-tag">
+          <span class="badge-dot"></span>
+          <span>Türk Dili ve Edebiyatı Konuşma Sınavı Projesi</span>
+        </div>
+
+        <h1 class="hero-title">
+          Kelimeler Arasındaki Duvarlar: <br>
+          <span class="gradient-text">Sözlü İletişim Engelleri</span>
+        </h1>
+
+        <p class="hero-desc">
+          "İki insan arasındaki en uzun mesafe, birbirini anlamayan iki kafa arasındaki mesafedir."
+          Sözler havada kaybolmasın, mesaj hedefine varsın. Sınıfta 28 kişilik interaktif soru arenası ve kulaktan
+          kulağa iletişim bozulması deneyi.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#sinif-quiz" class="btn btn-lg btn-gradient" id="hero-quiz-btn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="6"></circle>
+              <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+            <span>🎯 Sınıf Testi (Rastgele 1-28 Kişi)</span>
+          </a>
+
+          <a href="#deney" class="btn btn-lg btn-glass" id="hero-deney-btn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+            <span>🔄 Kulaktan Kulağa Deneyi</span>
+          </a>
+        </div>
+
+        <!-- İletişim İstatistikleri Kartları (Mehrabian Kuralı vb.) -->
+        <div class="stats-grid">
+          <div class="stat-card glass-panel">
+            <div class="stat-percent text-cyan">%55</div>
+            <div class="stat-label">Beden Dili & Mimikler</div>
+            <div class="stat-sub">Mesajın algılanmasında en güçlü belirleyici</div>
+          </div>
+          <div class="stat-card glass-panel">
+            <div class="stat-percent text-indigo">%38</div>
+            <div class="stat-label">Ses Tonu & Vurgu</div>
+            <div class="stat-sub">Söyleniş biçimi ve duygusal titreşim</div>
+          </div>
+          <div class="stat-card glass-panel">
+            <div class="stat-percent text-emerald">%7</div>
+            <div class="stat-label">Kelimelerin Kendisi</div>
+            <div class="stat-sub">Yalnızca sözcüklerin saf anlamsal payı</div>
+          </div>
+          <div class="stat-card glass-panel">
+            <div class="stat-percent text-amber">%60+</div>
+            <div class="stat-label">Engellere Takılan Pay</div>
+            <div class="stat-sub">Önyargı ve gürültüde kaybolan anlam</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BÖLÜM 1: ENGELLER ATLASI (4 TEMEL KATEGORİ) -->
+    <section class="section" id="engeller">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">KAPSAMLI SINIFLANDIRMA</span>
+          <h2 class="section-title">Sözlü İletişimin 4 Temel Engeli</h2>
+          <p class="section-subtitle">
+            Mesaj, kaynaktan alıcıya ulaşana dek hangi filtrelerde kırılır ve bozulur? İncelemek için kategorilere
+            tıklayın.
+          </p>
+        </div>
+
+        <!-- Filtre Sekmeleri -->
+        <div class="filter-tabs" id="barrier-filter-tabs">
+          <button class="filter-tab-btn active" data-filter="all">Tümü (4 Boyut)</button>
+          <button class="filter-tab-btn" data-filter="fiziksel">Fiziksel & Çevresel</button>
+          <button class="filter-tab-btn" data-filter="dilsel">Dilsel & Semantik</button>
+          <button class="filter-tab-btn" data-filter="psikolojik">Psikolojik & Duygusal</button>
+          <button class="filter-tab-btn" data-filter="sosyokulturel">Sosyokültürel & Algısal</button>
+        </div>
+
+        <div class="barriers-grid" id="barriers-container">
+          <!-- 1. Fiziksel Engeller -->
+          <article class="barrier-card glass-panel" data-category="fiziksel">
+            <div class="barrier-icon-badge bg-rose-glow">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+              </svg>
+            </div>
+            <div class="barrier-header">
+              <span class="category-pill pill-rose">Çevresel Faktör</span>
+              <h3 class="barrier-title">Fiziksel & Akustik Engeller</h3>
+            </div>
+            <p class="barrier-text">
+              Mesajın iletildiği ortamdaki gürültü, yankı, mesafe, akustik yetersizlikler veya fiziksel yorgunluk/işitme
+              sorunlarıdır.
+            </p>
+            <div class="barrier-examples">
+              <div class="example-item">
+                <span class="example-dot dot-rose"></span>
+                <span><strong>Sınıf İçi:</strong> Arka sıralardaki fısıltılar veya caddeden geçen korna sesi.</span>
+              </div>
+              <div class="example-item">
+                <span class="example-dot dot-rose"></span>
+                <span><strong>Teknolojik:</strong> Çevrim içi konuşmalarda mikrofon cızırtısı ve bağlantı
+                  kopması.</span>
+              </div>
+            </div>
+            <div class="barrier-solution">
+              <span class="solution-label">💡 Çözüm Reçetesi:</span>
+              <p>Ortamı sessizleştirmek, konuşmacıya yaklaşmak, net ve yeterli ses volümünü korumak.</p>
+            </div>
+          </article>
+
+          <!-- 2. Dilsel ve Semantik Engeller -->
+          <article class="barrier-card glass-panel" data-category="dilsel">
+            <div class="barrier-icon-badge bg-indigo-glow">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                <line x1="8" y1="7" x2="16" y2="7"></line>
+                <line x1="8" y1="11" x2="13" y2="11"></line>
+              </svg>
+            </div>
+            <div class="barrier-header">
+              <span class="category-pill pill-indigo">Anlamsal Engel</span>
+              <h3 class="barrier-title">Dilsel & Semantik Engeller</h3>
+            </div>
+            <p class="barrier-text">
+              Aşırı ağdalı kelimeler, yabancı özentisi terimler, mesleki jargon veya kelimelerin farklı anlamlara
+              çekilmesidir.
+            </p>
+            <div class="barrier-examples">
+              <div class="example-item">
+                <span class="example-dot dot-indigo"></span>
+                <span><strong>Jargon:</strong> Bir hekimin veya yazılımcının sıradan birine teknik terimlerle
+                  konuşması.</span>
+              </div>
+              <div class="example-item">
+                <span class="example-dot dot-indigo"></span>
+                <span><strong>Diksiyon:</strong> Anlaşılmayan harf yutmaları, aşırı hızlı veya mırıldanarak
+                  konuşma.</span>
+              </div>
+            </div>
+            <div class="barrier-solution">
+              <span class="solution-label">💡 Çözüm Reçetesi:</span>
+              <p>Yalın, duru Türkçe kullanmak; dinleyici kitlesinin seviyesine uygun sözcükler seçmek.</p>
+            </div>
+          </article>
+
+          <!-- 3. Psikolojik Engeller -->
+          <article class="barrier-card glass-panel" data-category="psikolojik">
+            <div class="barrier-icon-badge bg-amber-glow">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+              </svg>
+            </div>
+            <div class="barrier-header">
+              <span class="category-pill pill-amber">İçsel Faktör</span>
+              <h3 class="barrier-title">Psikolojik & Duygusal Engeller</h3>
+            </div>
+            <p class="barrier-text">
+              Önyargılar, dinleyici veya konuşmacının o anki stres, öfke, heyecan durumu, alınganlık ve savunmacı
+              dinleme tavrıdır.
+            </p>
+            <div class="barrier-examples">
+              <div class="example-item">
+                <span class="example-dot dot-amber"></span>
+                <span><strong>Önyargı:</strong> "Bu kişi ne anlatabilir ki?" diyerek peşinen zihni kapatmak.</span>
+              </div>
+              <div class="example-item">
+                <span class="example-dot dot-amber"></span>
+                <span><strong>Savunmacılık:</strong> Karşı tarafın her sözünü şahsi bir saldırı olarak algılamak.</span>
+              </div>
+            </div>
+            <div class="barrier-solution">
+              <span class="solution-label">💡 Çözüm Reçetesi:</span>
+              <p>Empatik dinleme geliştirmek, önyargıları kapıda bırakmak ve duygusal sakinliği sağlamak.</p>
+            </div>
+          </article>
+
+          <!-- 4. Sosyokültürel Engeller -->
+          <article class="barrier-card glass-panel" data-category="sosyokulturel">
+            <div class="barrier-icon-badge bg-emerald-glow">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                </path>
+              </svg>
+            </div>
+            <div class="barrier-header">
+              <span class="category-pill pill-emerald">Kültürel Boyut</span>
+              <h3 class="barrier-title">Sosyokültürel & Algısal Engeller</h3>
+            </div>
+            <p class="barrier-text">
+              Kuşak farklılıkları (Z kuşağı dili vs. ebeveyn dili), bölgesel şiveler, gelenekler ve beden dili algısının
+              kültürden kültüre değişmesidir.
+            </p>
+            <div class="barrier-examples">
+              <div class="example-item">
+                <span class="example-dot dot-emerald"></span>
+                <span><strong>Kuşak Çatışması:</strong> İnternet kısaltmalarının ve yeni tabirlerin büyüklerce
+                  anlaşılamaması.</span>
+              </div>
+              <div class="example-item">
+                <span class="example-dot dot-emerald"></span>
+                <span><strong>Jest / Mimik:</strong> Bir kültürde saygı olan baş eğmenin başka bir yerde özgüvensizlik
+                  sayılması.</span>
+              </div>
+            </div>
+            <div class="barrier-solution">
+              <span class="solution-label">💡 Çözüm Reçetesi:</span>
+              <p>Kültürel çeşitliliğe saygı duymak, ortak paydada buluşmak ve kapsayıcı bir üslup benimsemek.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- BÖLÜM 2: KULAKTAN KULAĞA MESAJ BOZULMASI DENEYİ -->
+    <section class="section section-alt" id="deney">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">CANLI ETKİLEŞİMLİ DENEY</span>
+          <h2 class="section-title">Kulaktan Kulağa İletişim Sapması</h2>
+          <p class="section-subtitle">
+            Mesaj 5 farklı aktarıcıdan geçerken önyargı, dikkatsizlik ve abartıyla nasıl bambaşka bir dedikoduya
+            dönüşüyor? Adım adım test edin.
+          </p>
+        </div>
+
+        <div class="lab-container">
+          <div class="sim-box glass-panel active" id="sim-telephone-box">
+            <div class="sim-box-header">
+              <div>
+                <h3 class="sim-box-title">5 Aşamalı Mesaj Deformasyon Simülasyonu</h3>
+                <p class="sim-box-desc">Her aktarımda nerede bilgi kaybı ve duygusal abartı oluştuğunu canlı izleyin.
+                </p>
+              </div>
+              <div class="sim-step-actions">
+                <button class="btn btn-sm btn-outline" id="telephone-reset-btn">🔄 Sıfırla</button>
+                <button class="btn btn-sm btn-primary" id="telephone-next-btn">Bir Sonraki Adıma Aktar ➡️</button>
+              </div>
+            </div>
+
+            <!-- Kulaktan Kulağa Akış Şeması -->
+            <div class="telephone-flow" id="telephone-flow-container">
+              <!-- JS ile dinamik doldurulacak -->
+            </div>
+
+            <div class="distortion-analysis-box glass-panel">
+              <h4 class="analysis-title">📊 Mesajın Deformasyon Analizi</h4>
+              <div class="distortion-bars">
+                <div class="dist-row">
+                  <span>Orijinallik Oranı:</span>
+                  <div class="dist-bar-track">
+                    <div class="dist-bar-fill fill-emerald" id="dist-truth-bar" style="width: 100%;"></div>
+                  </div>
+                  <span id="dist-truth-text">100%</span>
+                </div>
+                <div class="dist-row">
+                  <span>Önyargı & Bozulma Oranı:</span>
+                  <div class="dist-bar-track">
+                    <div class="dist-bar-fill fill-rose" id="dist-bias-bar" style="width: 0%;"></div>
+                  </div>
+                  <span id="dist-bias-text">0%</span>
+                </div>
+              </div>
+              <p class="analysis-quote" id="telephone-commentary">
+                <strong>Durum:</strong> Mesaj henüz başlangıç noktasında, hiçbir veri kaybı yok. "Bir Sonraki Adıma
+                Aktar" butonuna basarak aktarımı başlatın.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BÖLÜM 3: SINIF İÇİ İNTERAKTİF TEST (1-28 KİŞİLİK ŞANSLI NUMARA ÇARKI) -->
+    <section class="section" id="sinif-quiz">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">28 KİŞİLİK SINIF ETKİLEŞİMİ</span>
+          <h2 class="section-title">Sözün Gücü: Sınıf Soru Arenası</h2>
+          <p class="section-subtitle">
+            Her soruda 1'den 28'e kadar rastgele bir sıra numarası çekilir. O sırada oturan arkadaşımız soruyu cevaplar!
+          </p>
+        </div>
+
+        <div class="sinif-quiz-wrapper glass-panel">
+
+          <!-- Şanslı Numara Çekiliş Kartı (1-28) -->
+          <div class="lucky-seat-card">
+            <div class="lucky-seat-left">
+              <div class="seat-badge-container">
+                <div class="seat-number-box" id="lucky-seat-number">--</div>
+              </div>
+              <div class="seat-meta">
+                <span class="seat-title">ŞANSLI SIRA NUMARASI (1 - 28)</span>
+                <p class="seat-prompt" id="lucky-seat-text">
+                  🎲 Soru için rastgele bir arkadaşımız seçiliyor...
+                </p>
+              </div>
+            </div>
+
+            <div class="lucky-seat-right">
+              <button class="btn btn-outline btn-sm" id="re-spin-seat-btn">
+                🎲 Yeni Kişi Seç (1-28)
+              </button>
+            </div>
+          </div>
+
+          <!-- Soru Alanı -->
+          <div class="quiz-content-area" id="class-quiz-content">
+            <div class="quiz-header-bar">
+              <div class="quiz-step-indicator">
+                Soru <span id="quiz-current-num">1</span> / <span id="quiz-total-num">5</span>
+              </div>
+              <div class="quiz-score-badge">
+                Sınıf Başarısı: <span id="quiz-score">0</span> Puan
+              </div>
+            </div>
+
+            <div class="quiz-body" id="quiz-body">
+              <h3 class="quiz-question-title" id="quiz-question-text">Soru yükleniyor...</h3>
+              <div class="quiz-choices-list" id="quiz-choices-container">
+                <!-- Seçenekler JS ile gelecek -->
+              </div>
+            </div>
+
+            <div class="quiz-feedback-box" id="quiz-explanation-box" style="display: none;">
+              <div class="feedback-icon" id="feedback-icon">💡</div>
+              <div class="feedback-text" id="feedback-text"></div>
+              <button class="btn btn-primary btn-sm" id="quiz-next-question-btn">
+                Sonraki Soru & Yeni Numara ➡️
+              </button>
+            </div>
+
+            <!-- Sonuç Ekranı -->
+            <div class="quiz-result-screen" id="quiz-result-box" style="display: none;">
+              <div class="result-trophy">🎉</div>
+              <h3 class="result-title">Harika İş Çıkardınız, Sınıf!</h3>
+              <p class="result-score-text">Toplam Skor: <strong id="final-score-val">0</strong> / 100</p>
+              <p class="result-evaluation" id="result-evaluation-text">
+                28 kişilik sınıfımızla birlikte iletişim engellerini başarıyla analiz ettik!
+              </p>
+              <button class="btn btn-gradient btn-lg" id="quiz-restart-btn">
+                Testi & Çarkı Baştan Başlat 🔄
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- BÖLÜM 4: EDEBİ & FELSEFİ SÖZLER KÖŞESİ -->
+    <section class="section" id="alintilar">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">SÖZÜN HİKMETİ</span>
+          <h2 class="section-title">Edebi ve Düşünsel Rehberler</h2>
+          <p class="section-subtitle">
+            Konuşma sınavında jürinizi etkilemek için kullanabileceğiniz en seçkin edebi sözler ve anlamları.
+          </p>
+        </div>
+
+        <div class="quotes-carousel">
+          <div class="quote-card glass-panel">
+            <div class="quote-symbol">“</div>
+            <p class="quote-text">
+              Sen ne söylersen söyle, söylediğin karşındakinin anladığı kadardır.
+            </p>
+            <div class="quote-author">
+              <span class="author-name">Mevlânâ Celâleddîn-i Rûmî</span>
+              <span class="author-title">Mesnevî / Alıcı Merkezli İletişim</span>
+            </div>
+            <button class="quote-copy-btn"
+              data-quote="Sen ne söylersen söyle, söylediğin karşındakinin anladığı kadardır. - Mevlana">
+              📋 Sözü Kopyala
+            </button>
+          </div>
+
+          <div class="quote-card glass-panel">
+            <div class="quote-symbol">“</div>
+            <p class="quote-text">
+              Söz ola kese savaşı, söz ola kestire başı / Söz ola zehirli aşı, bal ile yağ ede bir söz.
+            </p>
+            <div class="quote-author">
+              <span class="author-name">Yunus Emre</span>
+              <span class="author-title">Türk Tasavvuf Şiiri / Sözün Gücü</span>
+            </div>
+            <button class="quote-copy-btn"
+              data-quote="Söz ola kese savaşı, söz ola kestire başı / Söz ola zehirli aşı, bal ile yağ ede bir söz. - Yunus Emre">
+              📋 Sözü Kopyala
+            </button>
+          </div>
+
+          <div class="quote-card glass-panel">
+            <div class="quote-symbol">“</div>
+            <p class="quote-text">
+              İletişimdeki en büyük problem; dinlemememiz, sadece cevap vermek için beklememizdir.
+            </p>
+            <div class="quote-author">
+              <span class="author-name">George Bernard Shaw</span>
+              <span class="author-title">Nobel Edebiyat Ödüllü Yazar</span>
+            </div>
+            <button class="quote-copy-btn"
+              data-quote="İletişimdeki en büyük problem; dinlemememiz, sadece cevap vermek için beklememizdir. - G. Bernard Shaw">
+              📋 Sözü Kopyala
+            </button>
+          </div>
+
+          <div class="quote-card glass-panel">
+            <div class="quote-symbol">“</div>
+            <p class="quote-text">
+              İki kulağımız ve bir ağzımız var; öyleyse dinlediğimizin yarısı kadar konuşmalıyız.
+            </p>
+            <div class="quote-author">
+              <span class="author-name">Epiktetos</span>
+              <span class="author-title">Stoacı Filozof</span>
+            </div>
+            <button class="quote-copy-btn"
+              data-quote="İki kulağımız ve bir ağzımız var; öyleyse dinlediğimizin yarısı kadar konuşmalıyız. - Epiktetos">
+              📋 Sözü Kopyala
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-left">
+        <div class="footer-brand">İLETİŞİMİN ENGELLERİ</div>
+        <p>Türk Dili ve Edebiyatı Konuşma Sınavı</p>
+      </div>
+      <div class="footer-center">
+        <span>"Egemn tarafından yapıldı."</span>
+      </div>
+      <div class="footer-right">
+        <a href="#hero" class="btn btn-sm btn-outline">Başa Dön ⬆️</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Bildirimi -->
+  <div id="toast" class="toast">Kopyalandı!</div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
